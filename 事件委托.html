@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    div {
+      width: 80vw;
+      height: 80vh;
+      border: 5px aquamarine solid;
+      margin: 0 auto;
+    }
+    div button {
+      width: 80px;
+      height: 30px;
+      background-color: cadetblue;
+      color: white;
+      font-size: bold;
+    }
+  </style>
+  <body>
+    <div id="father">
+      <button bubble="1">1</button>
+      <button bubble="2">2</button>
+      <button bubble="3">3</button>
+      <button bubble="4">4</button>
+      <button bubble="5">5</button>
+      <button bubble="6">6</button>
+      <button bubble="7">7</button>
+      <button bubble="8">8</button>
+      <button bubble="9">9</button>
+      <button bubble="10">10</button>
+    </div>
+  </body>
+  <script>
+    father.addEventListener("click", e => {
+      console.log(e.target.getAttribute('bubble'));
+      // e.stopPropagation();
+    });
+  </script>
+</html>
