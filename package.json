@@ -1,0 +1,22 @@
+{
+  "name": "code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "myPromise.js",
+  "scripts": {
+    "test": "promises-aplus-tests myPromise"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/XRain666/snippets.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/XRain666/snippets/issues"
+  },
+  "homepage": "https://github.com/XRain666/snippets#readme",
+  "devDependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  }
+}

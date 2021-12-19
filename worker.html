@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Worker</title>
+  </head>
+  <body></body>
+  <script>
+    window.onload = function () {
+      console.log("main onload");
+      // 实例化 Worker
+      const worker = new Worker("./worker.js");
+      Promise.resolve().then(() => {
+        console.log("promise");
+      });
+      setTimeout(() => {
+        console.log("timeout");
+      }, 15);
+      // index.html 接收数据
+      worker.addEventListener("message", (res) => {
+        console.log("index.html 收到数据：", res);
+      });
+
+      worker.postMessage("查房，这里是 index.html！");
+
+      setTimeout(() => {
+        console.log("timeout2");
+      }, 100);
+    };
+  </script>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <title>位置信息</title>
+  </head>
+  <style>
+    body {
+      padding: 8.3px;
+    }
+  </style>
+  <body>
+    <span>outer1</span>
+    <div
+      id="outer1"
+      style="
+        width: 200px;
+        height: 200px;
+        padding: 40px;
+        margin: 10px;
+        border: 40px solid cornflowerblue;
+        overflow: scroll;
+      "
+    >
+      <div
+        id="inner1"
+        style="
+          width: 300px;
+          height: 300px;
+          border: 20px solid burlywood;
+          padding: 20px;
+        "
+      ></div>
+    </div>
+    <span>outer2</span>
+    <div
+      dir="rtl"
+      id="outer2"
+      style="
+        width: 200px;
+        height: 200px;
+        padding: 20px;
+        border: 20px solid cornflowerblue;
+        overflow: scroll;
+        box-sizing: border-box;
+      "
+    >
+      <div
+        id="inner2"
+        style="
+          width: 300px;
+          height: 300px;
+          border: 20px solid cornflowerblue;
+          padding: 20px;
+          box-sizing: border-box;
+        "
+      ></div>
+    </div>
+    <hr />
+    <span id="text">非块级元素</span>
+  </body>
+  <script>
+    let outer1 = window.document.getElementById("outer1");
+    let outer2 = window.document.getElementById("outer2");
+    let inner1 = window.document.getElementById("inner1");
+    let inner2 = window.document.getElementById("inner2");
+    let text = window.document.getElementById("text");
+    console.group("Client系列");
+    console.log(
+      "clientHeight--outer1:",
+      outer1.clientHeight,
+      "outer2:",
+      outer2.clientHeight,
+      "text:",
+      text.clientHeight
+    );
+    console.log(
+      "clientWidth--outer1:",
+      outer1.clientWidth,
+      "outer2:",
+      outer2.clientWidth,
+      "text:",
+      text.clientWidth
+    );
+    console.log(
+      "clientLeft--outer1:",
+      outer1.clientLeft,
+      "outer2:",
+      outer2.clientLeft,
+      "text:",
+      text.clientLeft
+    );
+    console.log(
+      "clientTop--outer1:",
+      outer1.clientTop,
+      "outer2:",
+      outer2.clientTop,
+      "text:",
+      text.clientTop
+    );
+    console.groupEnd();
+
+    console.group("Scroll系列");
+    console.log(
+      "scrollHeight--outer1:",
+      outer1.scrollHeight,
+      "outer2:",
+      outer2.scrollHeight,
+      "text:",
+      text.scrollHeight
+    );
+    console.log(
+      "scrollWidth--outer1:",
+      outer1.scrollWidth,
+      "outer2:",
+      outer2.scrollWidth,
+      "text:",
+      text.scrollWidth
+    );
+    console.log(
+      "scrollLeft--outer1:",
+      outer1.scrollLeft,
+      "outer2:",
+      outer2.scrollLeft,
+      "text:",
+      text.scrollLeft
+    );
+    console.log(
+      "scrollTop--outer1:",
+      outer1.scrollTop,
+      "outer2:",
+      outer2.scrollTop,
+      "text:",
+      text.scrollTop
+    );
+    console.groupEnd();
+
+    console.group("Offset系列");
+    console.log(
+      "offsetHeight--outer1:",
+      outer1.offsetHeight,
+      "outer2:",
+      outer2.offsetHeight,
+      "text:",
+      text.offsetHeight
+    );
+    console.log(
+      "offsetWidth--outer1:",
+      outer1.offsetWidth,
+      "outer2:",
+      outer2.offsetWidth,
+      "text:",
+      text.offsetWidth
+    );
+    console.log(
+      "offsetLeft--outer1:",
+      outer1.offsetLeft,
+      "outer2:",
+      outer2.offsetLeft,
+      "text:",
+      text.offsetLeft
+    );
+    console.log(
+      "offsetTop--outer1:",
+      outer1.offsetTop,
+      "outer2:",
+      outer2.offsetTop,
+      "text:",
+      text.offsetTop
+    );
+    console.groupEnd();
+  </script>
+</html>
