@@ -2,9 +2,9 @@
   "name": "code",
   "version": "1.0.0",
   "description": "",
-  "main": "myPromise.js",
+  "main": "newPromise.js",
   "scripts": {
-    "test": "promises-aplus-tests myPromise"
+    "test": "promises-aplus-tests newPromise"
   },
   "repository": {
     "type": "git",

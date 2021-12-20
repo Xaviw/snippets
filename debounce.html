@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <title>防抖</title>
+  </head>
+  <body>
+    <button id="btn">click</button>
+  </body>
+  <script>
+    function debounce(func, time, immediate) {
+      let timeout;
+      return function () {
+        let context = this,
+          arg = arguments;
+        clearTimeout(timeout);
+        if (immediate) {
+          let callNow = !timeout;
+          timeout = setTimeout(function () {
+            timeout = null;
+          }, time);
+          if (callNow) {
+            return func.apply(context, arg);
+          }
+        } else {
+          timeout = setTimeout(function () {
+            func.apply(context, arg);
+          }, time);
+        }
+      };
+    }
+
+    function func(event) {
+      console.log("debounce", this, event);
+      return "test";
+    }
+
+    btn.addEventListener("click", debounce(func, 1000, true));
+  </script>
+</html>

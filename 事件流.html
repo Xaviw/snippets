@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="zh-cn" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>事件流</title>
+  </head>
+  <body>
+    <div id="div">
+      <ul id="ul" style="background-color: antiquewhite">
+        <li id="li1" style="background-color: aqua">
+          <a id="a" href="www.baidu.com" onclick="return false">baidu</a>
+        </li>
+        <li id="li2" style="background-color: aquamarine">li2</li>
+      </ul>
+    </div>
+  </body>
+  <script>
+    window.addEventListener("click", (e) => {
+      console.log("window bubble", e);
+    });
+    div.addEventListener("click", (e) => {
+      console.log("div bubble", e);
+    });
+    ul.addEventListener("click", (e) => {
+      console.log("ul bubble", e);
+    });
+    li1.addEventListener("click", (e) => {
+      console.log("li bubble", e);
+    });
+    // a.addEventListener("click", (e) => {
+    //   console.log("a bubble", e);
+    //   // return false;
+    //   // event.preventDefault();
+    // });
+    window.addEventListener(
+      "click",
+      (e) => {
+        console.log("window capture", e);
+        // event.stopPropagation();
+        // return false;
+      },
+      true
+    );
+    div.addEventListener(
+      "click",
+      (e) => {
+        console.log("div capture", e);
+      },
+      true
+    );
+    ul.addEventListener(
+      "click",
+      (e) => {
+        console.log("ul capture", e);
+        // return false;
+      },
+      true
+    );
+    li1.addEventListener(
+      "click",
+      (e) => {
+        console.log("li capture", e);
+      },
+      true
+    );
+    // a.addEventListener(
+    //   "click",
+    //   (e) => {
+    //     console.log("a capture", e);
+    //     // event.preventDefault();
+    //     return false;
+    //   },
+    //   true
+    // );
+
+    // ul.addEventListener("mouseover", () => {
+    //   console.log("ul mouseover");
+    // });
+    // ul.addEventListener("mouseenter", () => {
+    //   console.log("ul mouseenter");
+    // });
+    // li1.addEventListener("mouseover", () => {
+    //   console.log("li1 mouseover");
+    // });
+    // li1.addEventListener("mouseenter", () => {
+    //   console.log("li1 mouseenter");
+    // });
+    // li2.addEventListener("mouseover", () => {
+    //   console.log("li2 mouseover");
+    // });
+    // li2.addEventListener("mouseenter", () => {
+    //   console.log("li2 mouseenter");
+    // });
+  </script>
+</html>

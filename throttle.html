@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <button id="btn">click</button>
+  </body>
+  <script>
+    btn.onclick = throttle(
+      () => {
+        console.log("throttle");
+      },
+      2000,
+      true
+    );
+
+    function throttle(func, time, immediate) {
+      let timeout;
+      return function () {
+        let context = this,
+          args = arguments;
+        if (immediate) {
+          if (!timeout) {
+            func.apply(context, args);
+            timeout = setTimeout(() => {
+              timeout = null;
+            }, time);
+          }
+        } else {
+          if (!timeout) {
+            timeout = setTimeout(() => {
+              func.apply(context, args);
+              timeout = null;
+            }, time);
+          }
+        }
+      };
+    }
+  </script>
+</html>
