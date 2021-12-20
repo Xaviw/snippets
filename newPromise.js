@@ -1,13 +1,9 @@
-const PENDING = "pending",
-  FULFILLED = "fulfilled",
-  REJECTED = "rejected";
-
 class MyPromise {
-  status = PENDING;
+  status = "pending";
   value = null;
   reason = null;
-  onFulfilledCallback = [];
-  onRejectedCallback = [];
+  onFulfilledCallbacks = [];
+  onRejectedCallbacks = [];
 
   constructor(executor) {
     try {
@@ -18,39 +14,24 @@ class MyPromise {
   }
 
   resolve = (value) => {
-    if (this.status === PENDING) {
-      this.status = FULFILLED;
+    if (this.status === "pending") {
+      this.status = "fulfilled";
       this.value = value;
-      while (this.onFulfilledCallback.length) {
-        this.onFulfilledCallback.shift()(value);
+      while (this.onFulfilledCallbacks.length) {
+        this.onFulfilledCallbacks.shift()(value);
       }
     }
   };
-
-  static resolve(value) {
-    if (value instanceof MyPromise) {
-      return value;
-    }
-    return new MyPromise((resolve, reject) => {
-      resolve(value);
-    });
-  }
 
   reject = (reason) => {
-    if (this.status === PENDING) {
-      this.status = REJECTED;
+    if (this.status === "pending") {
+      this.status = "rejected";
       this.reason = reason;
-      while (this.onRejectedCallback.length) {
-        this.onRejectedCallback.shift()(reason);
+      while (this.onRejectedCallbacks.length) {
+        this.onRejectedCallbacks.shift()(reason);
       }
     }
   };
-
-  static reject(reason) {
-    return new MyPromise((resolve, reject) => {
-      reject(reason);
-    });
-  }
 
   then(onFulfilled, onRejected) {
     onFulfilled =
@@ -66,7 +47,7 @@ class MyPromise {
       const fulfilledMicrotask = () => {
         queueMicrotask(() => {
           try {
-            const x = onRejected(this.value);
+            const x = onFulfilled(this.value);
             this.resolvePromise(promise2, x, resolve, reject);
           } catch (err) {
             reject(err);
@@ -84,13 +65,13 @@ class MyPromise {
         });
       };
 
-      if (this.status === FULFILLED) {
+      if (this.status === "pending") {
+        this.onFulfilledCallbacks.push(fulfilledMicrotask);
+        this.onRejectedCallbacks.push(rejectedMicrotask);
+      } else if (this.status === "fulfilled") {
         fulfilledMicrotask();
-      } else if (this.status === REJECTED) {
+      } else if (this.status === "rejected") {
         rejectedMicrotask();
-      } else if (this.status === PENDING) {
-        this.onFulfilledCallback.push(fulfilledMicrotask);
-        this.onRejectedCallback.push(rejectedMicrotask);
       }
     });
 
@@ -99,63 +80,64 @@ class MyPromise {
 
   resolvePromise(promise, x, resolve, reject) {
     if (promise === x) {
-      return reject(
-        new TypeError("The promise and the return value are the same")
-      );
+      return reject(new TypeError("same"));
     }
-
-    if (typeof x === "object" || typeof x === "function") {
-      if (x === null) {
-        return resolve(x);
-      }
-
+    if ((typeof x === "object" && x !== null) || typeof x === "function") {
       let then;
       try {
-        // 把 x.then 赋值给 then
         then = x.then;
-      } catch (error) {
-        // 如果取 x.then 的值时抛出错误 error ，则以 error 为据因拒绝 promise
-        return reject(error);
+      } catch (err) {
+        reject(err);
       }
-
-      // 如果 then 是函数
+      let called = false;
       if (typeof then === "function") {
-        let called = false;
         try {
           then.call(
-            x, // this 指向 x
-            // 如果 resolvePromise 以值 y 为参数被调用，则运行 [[Resolve]](promise, y)
+            x,
             (y) => {
-              // 如果 resolvePromise 和 rejectPromise 均被调用，
-              // 或者被同一参数调用了多次，则优先采用首次调用并忽略剩下的调用
-              // 实现这条需要前面加一个变量 called
               if (called) return;
               called = true;
-              resolvePromise(promise, y, resolve, reject);
+              this.resolvePromise(promise, y, resolve, reject);
             },
-            // 如果 rejectPromise 以据因 r 为参数被调用，则以据因 r 拒绝 promise
             (r) => {
               if (called) return;
               called = true;
               reject(r);
             }
           );
-        } catch (error) {
-          // 如果调用 then 方法抛出了异常 error：
-          // 如果 resolvePromise 或 rejectPromise 已经被调用，直接返回
+        } catch (err) {
           if (called) return;
-
-          // 否则以 error 为据因拒绝 promise
-          reject(error);
+          reject(err);
         }
       } else {
-        // 如果 then 不是函数，以 x 为参数执行 promise
         resolve(x);
       }
     } else {
-      // 如果 x 不为对象或者函数，以 x 为参数执行 promise
       resolve(x);
     }
+  }
+
+  static resolve(value) {
+    // if (value instanceof MyPromise) return value;
+    // return new MyPromise((resolve) => {
+    //   resolve(value);
+    // });
+    if (value instanceof MyPromise) {
+      // 递归解析
+      return value.then(resolve, reject);
+    }
+    // ===================
+    if (this.status === "pending") {
+      this.status = "fulfilled";
+      this.value = value;
+      this.onFulfilledCallbacks.forEach((fn) => fn());
+    }
+  }
+
+  static reject(reason) {
+    return new MyPromise((resolve, reject) => {
+      reject(reason);
+    });
   }
 }
 
@@ -169,3 +151,16 @@ MyPromise.deferred = function () {
   return result;
 };
 module.exports = MyPromise;
+
+MyPromise.resolve(
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve("ok");
+    }, 3000);
+  })
+).then((data) => {
+  console.log(data, "success");
+});
+// .catch((err) => {
+//   console.log(err, "error");
+// });
