@@ -7,7 +7,7 @@ Function.prototype.myApply = function (context, arr) {
   } else {
     context[fn]();
   }
-  delete context.fn;
+  delete context[fn];
 };
 
 // var value = 2;
